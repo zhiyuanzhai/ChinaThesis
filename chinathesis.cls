@@ -6,7 +6,7 @@
 %%
 %% chinathesis.dtx  (with options: `class')
 %% 
-%% Copyright (C) 2015-2018 by Zeping Lee <zepinglee AT gmail.com>
+%% Copyright (C) 2015-2019 by Zeping Lee <zepinglee AT gmail.com>
 %% 
 %% This file may be distributed and/or modified under the
 %% conditions of the LaTeX Project Public License, either version 1.3c
@@ -158,9 +158,9 @@
 \@ifpackagelater{fontspec}{2017/01/20}{
   \IfFontExistsTF{STIX2Math.otf}{
     \ustc@stixtwotrue
-  }{}
-  \IfFontExistsTF{XITS-Regular.otf}{
-    \ustc@xitsnewtrue
+    \IfFontExistsTF{XITS-Regular.otf}{
+      \ustc@xitsnewtrue
+    }{}
   }{}
 }{}
 \ifustc@stixtwo
@@ -172,21 +172,12 @@
     \setmathfont[range={\partial,\lbrace,\rbrace}]{xits-math.otf}
   \fi
 \else
-  \ifustc@xitsnew
-    \setmathfont[
-      Extension    = .otf,
-      BoldFont     = XITSMath-Bold,
-      StylisticSet = 8,
-    ]{XITSMath-Regular}
-    \setmathfont[range={cal,bfcal},StylisticSet=1]{XITSMath-Regular.otf}
-  \else
-    \setmathfont[
-      Extension    = .otf,
-      BoldFont     = *bold,
-      StylisticSet = 8,
-    ]{xits-math}
-    \setmathfont[range={cal,bfcal},StylisticSet=1]{xits-math.otf}
-  \fi
+  \setmathfont[
+    Extension    = .otf,
+    BoldFont     = *bold,
+    StylisticSet = 8,
+  ]{xits-math}
+  \setmathfont[range={cal,bfcal},StylisticSet=1]{xits-math.otf}
 \fi
 \ustc@strifeq{\ustc@fontset}{mac}{
   \newfontfamily\ustc@circlefont{Songti SC Light}
