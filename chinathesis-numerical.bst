@@ -7,10 +7,10 @@
 %% gbt7714.dtx  (with options: `2015,numerical')
 %% -------------------------------------------------------------------
 %% GB/T 7714-2015 BibTeX Style
-%% https://github.com/zepinglee/gbt7714-bibtex-style
-%% Version: 2018/08/05 v1.0.9
+%% https://github.com/CTeX-org/gbt7714-bibtex-style
+%% Version: 2019/03/21 v1.1.1
 %% -------------------------------------------------------------------
-%% Copyright (C) 2016-2018 by Zeping Lee <zepinglee AT gmail.com>
+%% Copyright (C) 2016-2019 by Zeping Lee <zepinglee AT gmail.com>
 %% -------------------------------------------------------------------
 %% This file may be distributed and/or modified under the
 %% conditions of the LaTeX Project Public License, either version 1.3c
@@ -20,7 +20,6 @@
 %% and version 1.3c or later is part of all distributions of LaTeX
 %% version 2005/12/01 or later.
 %% -------------------------------------------------------------------
-
 INTEGERS {
   uppercase.name
   max.num.authors
@@ -42,7 +41,6 @@ FUNCTION {load.config}
 {
   #1 'uppercase.name :=
   #3 'max.num.authors :=
-  #0 'period.between.author.year :=
   #1 'sentence.case.title :=
   #0 'link.title :=
   #1 'show.mark :=
@@ -135,6 +133,9 @@ FUNCTION {bbl.et.al}
     }
   if$
 }
+
+FUNCTION {citation.et.al}
+{ bbl.et.al }
 
 FUNCTION {bbl.colon} { ": " }
 
@@ -613,13 +614,26 @@ FUNCTION {make.full.names}
 
 FUNCTION {output.bibitem}
 { newline$
-  "\bibitem[{" write$
+  "\bibitem[" write$
   label write$
   ")" make.full.names duplicate$ short.list =
      { pop$ }
      { * }
-   if$
-   "}]{" * write$
+  if$
+  's :=
+  s text.length$ 'charptr :=
+    { charptr #0 > }
+    { s charptr #1 substring$ "]" =
+        { #0 'charptr := }
+        { charptr #1 - 'charptr := }
+      if$
+    }
+  while$
+  charptr #0 >
+    { "{" s * "}" * }
+    { s }
+  if$
+  "]{" * write$
   cite$ write$
   "}" write$
   newline$
@@ -744,9 +758,9 @@ FUNCTION {format.number}
 
 FUNCTION {format.volume.number}
 { volume empty$ not
-   { format.volume }
-   { format.number }
- if$
+    { format.volume }
+    { format.number }
+  if$
 }
 
 FUNCTION {format.title.vol.num}
@@ -822,13 +836,10 @@ FUNCTION {format.series.vol.num.booktitle}
 { format.volume.number 's :=
   series empty$ not
     { series bbl.colon *
-      entry.numbered
-        { bbl.colon * }
-        { s empty$ not and
-            { s * bbl.wide.space * }
-            { bbl.colon * }
-          if$
-        }
+      entry.numbered not s empty$ not and
+        { s * bbl.wide.space * }
+        'skip$
+      if$
       booktitle *
     }
     { format.booktitle.vol.num }
@@ -845,7 +856,7 @@ FUNCTION {format.series.vol.num.booktitle}
 
 FUNCTION {format.journal}
 { journal
-  italic.jounal
+  italic.jounal entry.lang lang.en = and
     'italicize
     'skip$
   if$
@@ -1630,7 +1641,7 @@ FUNCTION {format.lab.names}
     { t #1 "{ll}{ff}" format.name$}
   if$
   s num.names$ #1 >
-    { bbl.space * bbl.et.al * }
+    { bbl.space * citation.et.al * }
     'skip$
   if$
 }
