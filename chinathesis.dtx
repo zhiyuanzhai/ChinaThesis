@@ -715,7 +715,7 @@ version 2005/12/01 or later.
 % \begin{macro}{\ustc@strifeq}
 % 使用 \LaTeX3 的功能判断字符串是否相等。这里也可以使用 \pkg{xstring} 宏包。
 %    \begin{macrocode}
-\newcommand\ustc@strifeq{\csname str_if_eq_x:nnTF\endcsname}
+\newcommand\ustc@strifeq{\csname str_if_eq:eeTF\endcsname}
 %    \end{macrocode}
 % \end{macro}
 %
